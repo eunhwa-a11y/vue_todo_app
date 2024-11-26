@@ -1,15 +1,25 @@
 <script setup>
+
 defineProps({
-  msg: {
+  todo: {
     type: String,
-    required: true,
+    required: true, // 필수
   },
 })
+
 </script>
 
 <template>
   <div>
-
+    <BFormCheckbox
+      id="checkbox-1"
+      v-model="status"
+      name="checkbox-1"
+      value="accepted"
+      unchecked-value="not_accepted"
+    >
+      {{todo}}
+    </BFormCheckbox>
   </div>
 </template>
 
