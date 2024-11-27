@@ -1,40 +1,49 @@
 <script setup>
+import { ref } from 'vue';
 
-  const props = defineProps({
-    todo: {
-      type: String,
-      required: true, // 필수
-    },
+const props = defineProps({
+  todo: {
+    type: Object,
+    required: true,
+  },
+})
+const emit = defineEmits(['toggle-checkbox'],['todo-delete'])
+
+const isChecked  = ref(props.todo.checked);
+
+const toggleCheckbox = (e)=>{
+
+  emit('toggle-checkbox',{
+    id:props.todo.id,
+    checked:e.target.checked
   })
-  const emit = defineEmits(['toggle-checkbox'])
-  const toggleCheckbox = (e) => {
-    emit('toggle-checkbox', { // true인지 false인지 넘겨 줘야 함
-      id : props.todo.id,
-      checked : e.target.checked
-    })
-  }
+}
+const todoDelete = ()=>{
+  emit('todo-delete',{
+    id:props.todo.id
+  })
+}
 
 </script>
 
 <template>
-  <div>
+  <div class="d-flex gap-1 align-items-center mt-3">
+
     <BFormCheckbox
-      id="checkbox-1"
-      v-model="status"
-      name="checkbox-1"
-      value="accepted"
-      unchecked-value="not_accepted"
+      :id="`checkbox-${todo.id}`"
+      v-model="isChecked"
+      :name="`checkbox-${todo.id}`"
       @change="toggleCheckbox"
     >
-      <span :class="todo.checked && 'muted'">{{todo.title}}</span>
+      <span :class="{ muted: todo.checked }">{{todo.title}}</span>
     </BFormCheckbox>
+    <BButton variant="danger" size="sm" @click="todoDelete">삭제</BButton>
+
   </div>
 </template>
 
 <style scoped>
-
   .muted{
-    text-decoration : line-through !important;
+    text-decoration: line-through;
   }
-
 </style>
